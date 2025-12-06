@@ -10,9 +10,14 @@ class PostController extends Controller
     public function index()
     {
         // Mengambil semua data post dari database
-        $posts = Post::all();
+        $posts = Post::with(['author', 'category'])->get();
 
         // Mengirim data $posts ke view 'posts.blade.php'
         return view('posts', compact('posts'));
+    }
+
+    public function show(Post $post) {
+        $post->load(['author', 'category']);
+        return view('post', compact('post'));
     }
 }
