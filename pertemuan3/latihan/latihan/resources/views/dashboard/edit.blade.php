@@ -3,23 +3,30 @@
         Edit Post - Dashboard
     </x-slot:title>
 
-    <div class="max-w-2xl mx-auto">
-        {{-- Header --}}
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Edit Post</h1>
+    {{-- Page Header --}}
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-2">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Edit Post</h1>
+                <p class="text-gray-600 mt-1">Update your blog post information below.</p>
+            </div>
+            <a href="{{ route('dashboard.index') }}" class="inline-flex items-center text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Posts
+            </a>
+        </div>
+    </div>
+
+    {{-- Form Card --}}
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Post Information</h2>
+            <p class="text-sm text-gray-600 mt-1">Update the details for your post</p>
         </div>
 
-        {{-- Form Card --}}
-        <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
-            {{-- Form Header --}}
-            <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5 mb-4 md:mb-6">
-                <h3 class="text-lg font-medium text-heading">
-                    Post Information
-                </h3>
-            </div>
-
-            {{-- Import Form Component --}}
-            {{-- Pass post data untuk edit mode --}}
+        <div class="p-6">
             <x-posts.form :categories="$categories" :post="$post" />
         </div>
     </div>

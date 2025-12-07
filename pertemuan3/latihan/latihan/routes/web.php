@@ -17,12 +17,17 @@ Route::get('/about', function () {
 });
 
 Route::get('/blog', function () {
-    return view('blog');
+    return view('blog', [
+        'posts' => \App\Models\Post::with('category')->latest()->get()
+    ]);
 });
 
 Route::get('/contact', function () {
     return view('contact');
 });
+
+// Redirect /post ke /posts
+Route::redirect('/post', '/posts');
 
 // ==========================
 // BAGIAN AUTH (SESUAI MODUL)
@@ -82,3 +87,6 @@ Route::put('/dashboard/{post:slug}', [DashboardPostController::class, 'update'])
 
 // Delete - Menghapus post
 Route::delete('/dashboard/{post:slug}', [DashboardPostController::class, 'destroy'])->middleware(['auth', 'verified'])->name('dashboard.destroy');
+
+// Tambahkan baris ini di web.php
+Route::resource('/dashboard/categories', \App\Http\Controllers\AdminCategoryController::class)->except('show');

@@ -1,144 +1,67 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardPostController;
+use App\Http\Controllers\AdminCategoryController;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+/*
+|--------------------------------------------------------------------------
+| Web Routes (PUBLIC)
+|--------------------------------------------------------------------------
+*/
 
-class CategoryDashboardController extends Controller
-{
-    /**
-     * Display a listing of categories.
-     */
-    public function index()
-    {
-        $categories = Category::withCount('posts')
-            ->when(request('search'), function ($query) {
-                $query->where('name', 'like', '%' . request('search') . '%')
-                      ->orWhere('slug', 'like', '%' . request('search') . '%');
-            })
-            ->paginate(10);
+Route::get('/', function () {
+    return view('home', ["title" => "Home", "active" => "home"]);
+});
 
-        return view('dashboard.categories.index', compact('categories'));
-    }
+Route::get('/about', function () {
+    return view('about', [
+        "title" => "About",
+        "active" => "about",
+        "name" => "Firda Gendut",
+        "email" => "firda@gmail.com", // Ganti emailmu
+        "image" => "profile.jpg"
+    ]);
+});
 
-    /**
-     * Show the form for creating a new category.
-     */
-    public function create()
-    {
-        return view('dashboard.categories.create');
-    }
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{post:slug}', [PostController::class, 'show']);
+Route::get('/categories', [CategoryController::class, 'index']);
 
-    /**
-     * Store a newly created category in storage.
-     */
-    public function store(Request $request)
-    {
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:categories,name',
-            'slug' => 'nullable|string|max:255|unique:categories,slug',
-        ], [
-            'name.required' => 'Nama kategori wajib diisi',
-            'name.unique' => 'Nama kategori sudah digunakan',
-            'slug.unique' => 'Slug sudah digunakan',
-        ]);
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate']); 
+Route::post('/logout', [LoginController::class, 'logout']);
 
-        // Failure Handling
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
+Route::post('/register', [RegisterController::class, 'store']);
 
-        // Generate slug jika tidak diisi
-        $slug = $request->slug ?? Str::slug($request->name);
+/*
+|--------------------------------------------------------------------------
+| Dashboard Routes (DILINDUNGI LOGIN)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->group(function () {
+    
+    // 1. Dashboard Utama (Statistik/Welcome)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Simpan category
-        Category::create([
-            'name' => $request->name,
-            'slug' => $slug,
-        ]);
+    // 2. Dashboard Posts (CRUD Postingan)
+    // URL-nya jadi: /dashboard/posts
+    Route::resource('/dashboard/posts', DashboardPostController::class);
 
-        return redirect()
-            ->route('dashboard.categories.index')
-            ->with('success', 'Kategori berhasil ditambahkan!');
-    }
+    // 3. Admin Categories (CRUD Kategori)
+    // URL-nya jadi: /dashboard/categories
+    // 'except show' karena biasanya kategori admin tidak butuh halaman detail
+    Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show');
 
-    /**
-     * Display the specified category.
-     */
-    public function show(Category $category)
-    {
-        $category->load('posts');
-        return view('dashboard.categories.show', compact('category'));
-    }
-
-    /**
-     * Show the form for editing the specified category.
-     */
-    public function edit(Category $category)
-    {
-        return view('dashboard.categories.edit', compact('category'));
-    }
-
-    /**
-     * Update the specified category in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
-        ], [
-            'name.required' => 'Nama kategori wajib diisi',
-            'name.unique' => 'Nama kategori sudah digunakan',
-            'slug.unique' => 'Slug sudah digunakan',
-        ]);
-
-        // Failure Handling
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        // Generate slug jika tidak diisi
-        $slug = $request->slug ?? Str::slug($request->name);
-
-        // Update category
-        $category->update([
-            'name' => $request->name,
-            'slug' => $slug,
-        ]);
-
-        return redirect()
-            ->route('dashboard.categories.index')
-            ->with('success', 'Kategori berhasil diperbarui!');
-    }
-
-    /**
-     * Remove the specified category from storage.
-     */
-    public function destroy(Category $category)
-    {
-        // Cek apakah category memiliki posts
-        if ($category->posts()->count() > 0) {
-            return redirect()
-                ->back()
-                ->with('error', 'Kategori tidak dapat dihapus karena masih memiliki postingan!');
-        }
-
-        $category->delete();
-
-        return redirect()
-            ->route('dashboard.categories.index')
-            ->with('success', 'Kategori berhasil dihapus!');
-    }
-}
+});

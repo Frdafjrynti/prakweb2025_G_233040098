@@ -12,13 +12,33 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="text-xl font-bold text-blue-600">My Laravel App</div>
-                <div class="flex space-x-6">
+                <div class="flex items-center space-x-6">
                     <a href="/" class="text-gray-700 hover:text-blue-600 transition">Home</a>
                     <a href="/about" class="text-gray-700 hover:text-blue-600 transition">About</a>
                     <a href="/blog" class="text-gray-700 hover:text-blue-600 transition">Blog</a>
                     <a href="/posts" class="text-gray-700 hover:text-blue-600 transition">Posts</a>
                     <a href="{{ route('categories.index') }}" class="text-gray-700 hover:text-blue-600 transition">Categories</a>
                     <a href="/contact" class="text-gray-700 hover:text-blue-600 transition">Contact</a>
+
+                    @auth
+                        {{-- Menu untuk user yang sudah login --}}
+                        <a href="{{ route('dashboard.index') }}" class="text-gray-700 hover:text-blue-600 transition font-semibold">Dashboard</a>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-gray-600">Hi, {{ auth()->user()->name }}</span>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        {{-- Menu untuk user yang belum login --}}
+                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 transition">Login</a>
+                        <a href="{{ route('register') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
+                            Register
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>

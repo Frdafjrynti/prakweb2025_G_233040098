@@ -23,8 +23,19 @@ class DashboardPostController extends Controller
             $posts->where('title', 'like', '%' . request('search') . '%');
         }
 
+        // Statistics for dashboard cards
+        $totalPosts = Post::where('user_id', auth()->user()->id)->count();
+        $postsThisMonth = Post::where('user_id', auth()->user()->id)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+        $totalCategories = Category::count();
+
         return view('dashboard.index', [
-            'posts' => $posts->paginate(10)->withQueryString()
+            'posts' => $posts->paginate(10)->withQueryString(),
+            'totalPosts' => $totalPosts,
+            'postsThisMonth' => $postsThisMonth,
+            'totalCategories' => $totalCategories
         ]);
     }
 
