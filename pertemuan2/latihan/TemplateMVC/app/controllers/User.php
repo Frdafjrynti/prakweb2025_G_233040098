@@ -3,12 +3,12 @@
 class User extends Controller {
   public function index() {
     $data["judul"] = "Data user";
-    $data['users'] = $this->model('User_model')->gatAllUsers();
+    $data['users'] = $this->model('User_model')->getAllUser();
     $this->view('list', $data);
   }
   public function detail($id) {
     $data["judul"] = "Detail user";
-    $data['users'] = $this->model('User_model')->gatUserById();
+    $data['users'] = $this->model('User_model')->getUserById($id);
     $this->view('detail', $data);
   }
 
@@ -34,7 +34,7 @@ class User extends Controller {
       }
     } else {
       $data["judul"] = "Ubah Data user";
-      $data['users'] = $this->model('User_model')->gatUserById();
+      $data['users'] = $this->model('User_model')->getUserById($data);
       $this->view('ubah', $data);
     }
   }

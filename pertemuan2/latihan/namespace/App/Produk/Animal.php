@@ -1,4 +1,6 @@
 <?php
+namespace App\Produk;
+
 // Abstract class dengan 1 minimal abstract method
 abstract class Animal
 {

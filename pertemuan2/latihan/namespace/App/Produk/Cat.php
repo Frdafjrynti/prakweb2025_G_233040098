@@ -1,4 +1,6 @@
 <?php
+namespace App\Produk;
+
 // Inheritance animal dengan sebuah abstract method
 class Cat extends Animal
 {

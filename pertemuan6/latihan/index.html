@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Praktikum Javascript & DOM</title>
+    <style>
+        /* Style dari Halaman 13 (Manipulasi Class) */
+        .kotak { width: 100px; height: 100px; background: lightblue; transition: 0.3s; margin-top: 10px; }
+        .besar { transform: scale(1.5); }
+        
+        body { font-family: sans-serif; padding: 20px; }
+        section { margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Modul Praktikum Web 2025/2026</h1>
+
+    <section>
+        <h3>1. DOM Dasar & Style</h3>
+        <h1 id="judul">Hello World!</h1>
+        <button onclick="ubahWarnaJudul()">Ubah Warna Judul</button>
+    </section>
+
+    <section>
+        <h3>2. InnerHTML</h3>
+        <p id="judul-klik">Belum diklik</p>
+        <button onclick="ubahIsi()">Ubah Isi</button>
+    </section>
+
+    <section>
+        <h3>3. Ganti Style Teks</h3>
+        <p id="teks">Ini teks biasa</p>
+        <button onclick="gantiWarna()">Ubah Warna & Ukuran</button>
+    </section>
+
+    <section>
+        <h3>4. Manipulasi Atribut (Gambar)</h3>
+        <img id="gambar" src="https://via.placeholder.com/150" width="150" alt="placeholder">
+        <br><br>
+        <button onclick="gantiFoto()">Ganti Foto/Ukuran</button>
+    </section>
+
+    <section>
+        <h3>5. ClassList (Toggle)</h3>
+        <p id="box" class="kotak">Ini kotak</p>
+        <button onclick="besarKecil()">Toggle Besar</button>
+    </section>
+
+    <section>
+        <h3>6. Event Handler & Listener</h3>
+        <p id="p">Paragraf 1</p>
+        <button id="ubah">Ubah P1 (Event Handler)</button>
+        <button id="ubahJudul">Ubah Judul (EventListener)</button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

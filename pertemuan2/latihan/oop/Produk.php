@@ -21,7 +21,7 @@ class Produk {
 
     // pindahkan getharga()
     public function getHarga() {
-      return $this-> harga;
+      return $this->harga;
     }
 
     // Method Umum 
@@ -52,38 +52,39 @@ class Komik extends Produk {
 
     public function getInfoProduk() { 
         // Ambil method getLabel() dari parent 
-        $infoParent = parent:: getInfoProduk();
-        return "Komik:  {$infoParent} - {$this->jmlHalaman} . Halaman";
+        $infoParent = parent::getInfoProduk();
+        return "Komik: {$infoParent} - {$this->jmlHalaman} Halaman";
     }
 }
 
-// // CHILD CLASS 2 
-// class Game extends Produk { 
-//     public $waktuMain; 
+// CHILD CLASS 2 
+class Game extends Produk { 
+    public $waktuMain; 
 
-//     public function __construct($judul, $penulis, $penerbit, $harga, $waktuMain) { 
-//         parent::__construct($judul, $penulis, $penerbit, $harga); 
-//         $this->waktuMain = $waktuMain; 
-//     }
+    public function __construct($judul, $penulis, $penerbit, $harga, $waktuMain) { 
+        parent::__construct($judul, $penulis, $penerbit, $harga); 
+        $this->waktuMain = $waktuMain; 
+    }
 
-//     public function getInfoProduk() { 
-//         $infoParent = parent::getInfoProduk();
-//         return "Game: {$infoParent} ~ {$this->waktuMain} Jam.";
-//     }
-// }
+    public function getInfoProduk() { 
+        $infoParent = parent::getInfoProduk();
+        return "Game: {$infoParent} ~ {$this->waktuMain} Jam.";
+    }
+}
 
 // --- BAGIAN OBJECT ---
-    $produk1 = new Komik("Naruto", "Masashi Kishimoto", "Shonen Jump", 30000, 100);
-// $produk2 = new Game("Uncharted", "Neil Druckmann", "Sony Computer", 250000, 50);
+$produk1 = new Komik("Naruto", "Masashi Kishimoto", "Shonen Jump", 30000, 100);
+$produk2 = new Game("Uncharted", "Neil Druckmann", "Sony Computer", 250000, 50);
   
 // Ini Setter 
 // Property Private yang awalnya "Naruto" berubah menjadi "Goku"
-  $produk1->setJudul("Goku");
+$produk1->setJudul("Goku");
 
 // Ini Getter
-  echo $produk1->getInfoProduk(); 
-  echo "<br>"; 
+echo $produk1->getInfoProduk(); 
+echo "<br>"; 
 
-  echo $produk1->getJudul();
-// echo $produk2->getInfoProduk(); 
+echo $produk1->getJudul();
+echo "<br>";
+echo $produk2->getInfoProduk(); 
 ?>
